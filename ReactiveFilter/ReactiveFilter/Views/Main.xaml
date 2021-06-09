@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<vm:BasePage x:Class="ReactiveFilter.Main"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ReactiveFilter;assembly=ReactiveFilter"
+             x:TypeArguments="vm:MainViewModel"
+             NavigationPage.HasNavigationBar="False">
+    <Grid RowDefinitions="Auto, 1*" RowSpacing="0">
+        <SearchBar x:Name="SearchBar" />
+        <CollectionView x:Name="Elements" Grid.Row="1" />
+        <Grid x:Name="ActivityIndicator"
+              Grid.Row="0"
+              Grid.RowSpan="2"
+              BackgroundColor="#BC000000">
+            <ActivityIndicator HeightRequest="48"
+                               HorizontalOptions="Center"
+                               IsRunning="True"
+                               VerticalOptions="Center"
+                               WidthRequest="48"
+                               Color="#FFFFFF" />
+        </Grid>
+    </Grid>
+</vm:BasePage>

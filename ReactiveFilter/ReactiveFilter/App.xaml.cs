@@ -1,16 +1,16 @@
-﻿using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
-namespace ReactiveFilter
+﻿namespace ReactiveFilter
 {
-    public partial class App : Application
+    using Xamarin.Forms;
+
+    public partial class App
     {
         public App()
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            var start = new AppBootstrap();
+
+            MainPage = new NavigationPage(new Main());
         }
 
         protected override void OnStart()

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<rxui:ReactiveContentView x:Class="ReactiveFilter.Views.Element"
+                          xmlns="http://xamarin.com/schemas/2014/forms"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                          xmlns:rxui="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
+                          xmlns:vm="clr-namespace:ReactiveFilter;assembly=ReactiveFilter"
+                          x:TypeArguments="vm:ElementViewModel">
+    <ContentView.Content>
+        <StackLayout>
+            <Label Text="Hello Xamarin.Forms!" />
+        </StackLayout>
+    </ContentView.Content>
+</rxui:ReactiveContentView>
