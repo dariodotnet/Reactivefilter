@@ -64,11 +64,16 @@
                 Mobile = MobileProperties.Mobiles[_random.Next(0, MobileProperties.Mobiles.Count - 1)],
                 TimeStamp = DateTime.UtcNow.AddDays(_random.Next(-185, -1)).AddHours(_random.Next(0, 23)).AddMinutes(_random.Next(0, 58)).AddSeconds(_random.Next(0, 58)),
                 Color = MobileProperties.Colors[_random.Next(0, MobileProperties.Colors.Count - 1)],
+                UserValue = _random.Next(1, 5)
             };
+
+            element.Description = element.Mobile.ToString();
 
             var elements = Elements.Items.Where(x => !x.Id.Equals(element.Id) && x.Description == element.Description);
 
-            element.DeliveryTime = !elements.Any() ? TimeSpan.FromDays(_random.Next(1, 3)) : elements.FirstOrDefault().DeliveryTime;
+            element.DeliveryTime = !elements.Any()
+                ? TimeSpan.FromDays(_random.Next(1, 3))
+                : elements.FirstOrDefault().DeliveryTime;
 
             element.UsersValue = elements.Select(x => x.UserValue).ToList();
 
@@ -80,32 +85,31 @@
     {
         public static List<Mobile> Mobiles = new List<Mobile>
         {
-            new Mobile{ Model = "iPhone 7", OperativeSystem = "iOS", Brand = "Apple", Cost = 250.00 },
-            new Mobile{ Model = "iPhone 7 Plus", OperativeSystem = "iOS", Brand = "Apple", Cost = 325.00 },
-            new Mobile{ Model = "iPhone 8", OperativeSystem = "iOS", Brand = "Apple", Cost = 275.50 },
-            new Mobile{ Model = "iPhone 8 Plus", OperativeSystem = "iOS", Brand = "Apple", Cost = 375.75 },
-            new Mobile{ Model = "iPhone X", OperativeSystem = "iOS", Brand = "Apple", Cost = 425.00 },
-            new Mobile{ Model = "iPhone XS", OperativeSystem = "iOS", Brand = "Apple", Cost = 400.00 },
-            new Mobile{ Model = "iPhone 11", OperativeSystem = "iOS", Brand = "Apple", Cost = 525.00 },
-            new Mobile{ Model = "iPhone 11 Pro", OperativeSystem = "iOS", Brand = "Apple", Cost = 625.00 },
-            new Mobile{ Model = "iPhone 12", OperativeSystem = "iOS", Brand = "Apple", Cost = 725.00 },
-            new Mobile{ Model = "iPhone 12 Pro", OperativeSystem = "iOS", Brand = "Apple", Cost = 925.00 },
-            new Mobile{ Model = "iPhone 12 Pro Max", OperativeSystem = "iOS", Brand = "Apple", Cost = 1025.50 },
-            new Mobile{ Model = "Samsung SII", OperativeSystem = "Android", Brand = "Samsung", Cost = 125.00 },
-            new Mobile{ Model = "Samsung SIII", OperativeSystem = "Android", Brand = "Samsung", Cost = 132.00 },
-            new Mobile{ Model = "Samsung SIV", OperativeSystem = "Android", Brand = "Samsung", Cost = 145.00 },
-            new Mobile{ Model = "Samsung SV", OperativeSystem = "Android", Brand = "Samsung", Cost = 175.00 },
-            new Mobile{ Model = "Samsung SVI", OperativeSystem = "Android", Brand = "Samsung", Cost = 195.00 },
-            new Mobile{ Model = "Samsung S7", OperativeSystem = "Android", Brand = "Samsung", Cost = 215.00 },
-            new Mobile{ Model = "Samsung S8", OperativeSystem = "Android", Brand = "Samsung", Cost = 245.00 },
-            new Mobile{ Model = "Samsung S9", OperativeSystem = "Android", Brand = "Samsung", Cost = 345.00 },
-            new Mobile{ Model = "Samsung SX", OperativeSystem = "Android", Brand = "Samsung", Cost = 645.00 }
+            new Mobile{ Model = "iPhone 7", OperativeSystem = "iOS", Brand = "Apple", Cost = 250.00d },
+            new Mobile{ Model = "iPhone 7 Plus", OperativeSystem = "iOS", Brand = "Apple", Cost = 325.00d },
+            new Mobile{ Model = "iPhone 8", OperativeSystem = "iOS", Brand = "Apple", Cost = 275.50d },
+            new Mobile{ Model = "iPhone 8 Plus", OperativeSystem = "iOS", Brand = "Apple", Cost = 375.75d },
+            new Mobile{ Model = "iPhone X", OperativeSystem = "iOS", Brand = "Apple", Cost = 425.00d },
+            new Mobile{ Model = "iPhone XS", OperativeSystem = "iOS", Brand = "Apple", Cost = 400.00d },
+            new Mobile{ Model = "iPhone 11", OperativeSystem = "iOS", Brand = "Apple", Cost = 525.00d },
+            new Mobile{ Model = "iPhone 11 Pro", OperativeSystem = "iOS", Brand = "Apple", Cost = 625.00d },
+            new Mobile{ Model = "iPhone 12", OperativeSystem = "iOS", Brand = "Apple", Cost = 725.00d },
+            new Mobile{ Model = "iPhone 12 Pro", OperativeSystem = "iOS", Brand = "Apple", Cost = 925.00d },
+            new Mobile{ Model = "iPhone 12 Pro Max", OperativeSystem = "iOS", Brand = "Apple", Cost = 1025.50d },
+            new Mobile{ Model = "Samsung SII", OperativeSystem = "Android", Brand = "Samsung", Cost = 125.00d },
+            new Mobile{ Model = "Samsung SIII", OperativeSystem = "Android", Brand = "Samsung", Cost = 132.00d },
+            new Mobile{ Model = "Samsung SIV", OperativeSystem = "Android", Brand = "Samsung", Cost = 145.00d },
+            new Mobile{ Model = "Samsung SV", OperativeSystem = "Android", Brand = "Samsung", Cost = 175.00d },
+            new Mobile{ Model = "Samsung SVI", OperativeSystem = "Android", Brand = "Samsung", Cost = 195.00d },
+            new Mobile{ Model = "Samsung S7", OperativeSystem = "Android", Brand = "Samsung", Cost = 215.00d },
+            new Mobile{ Model = "Samsung S8", OperativeSystem = "Android", Brand = "Samsung", Cost = 245.00d },
+            new Mobile{ Model = "Samsung S9", OperativeSystem = "Android", Brand = "Samsung", Cost = 345.00d },
+            new Mobile{ Model = "Samsung SX", OperativeSystem = "Android", Brand = "Samsung", Cost = 645.00d }
         };
 
         public static List<string> Colors = new List<string>
         {
             "Black",
-            "White",
             "Blue",
             "Orange",
             "Red"

@@ -2,12 +2,45 @@
 <vm:BasePage x:Class="ReactiveFilter.Main"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:views="clr-namespace:ReactiveFilter.Views;assembly=ReactiveFilter"
              xmlns:vm="clr-namespace:ReactiveFilter;assembly=ReactiveFilter"
              x:TypeArguments="vm:MainViewModel"
              NavigationPage.HasNavigationBar="False">
     <Grid RowDefinitions="Auto, 1*" RowSpacing="0">
-        <SearchBar x:Name="SearchBar" />
-        <CollectionView x:Name="Elements" Grid.Row="1" />
+        <toolkit:Expander x:Name="Expander">
+            <toolkit:Expander.Header>
+                <Grid>
+                    <SearchBar x:Name="SearchBar"
+                               Margin="0,0,48,0"
+                               HeightRequest="48"
+                               Placeholder="Filter by model" />
+                    <Button x:Name="ExpanderActivator"
+                            Margin="4,0"
+                            Padding="0,0"
+                            BackgroundColor="#2196F3"
+                            FontAttributes="Bold"
+                            HeightRequest="40"
+                            HorizontalOptions="End"
+                            Rotation="90"
+                            Text="&gt;"
+                            VerticalOptions="Center"
+                            WidthRequest="40" />
+                </Grid>
+            </toolkit:Expander.Header>
+            <toolkit:Expander.Content>
+                <StackLayout HeightRequest="480" Spacing="12" />
+            </toolkit:Expander.Content>
+        </toolkit:Expander>
+
+
+        <CollectionView x:Name="Elements" Grid.Row="1">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <views:Element />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
         <Grid x:Name="ActivityIndicator"
               Grid.Row="0"
               Grid.RowSpan="2"

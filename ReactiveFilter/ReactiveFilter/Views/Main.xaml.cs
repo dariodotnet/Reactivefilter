@@ -31,6 +31,15 @@
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .BindTo(this, v => v.ActivityIndicator.IsVisible).DisposeWith(Disposables);
 
+            ExpanderActivator.Events().Clicked
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Do(x =>
+                {
+                    Expander.IsExpanded = !Expander.IsExpanded;
+                    ExpanderActivator.Rotation = Expander.IsExpanded ? -90 : 90;
+                })
+                .Subscribe();
+
             //TODO navigate on selected element
             //TestClick.Events().Clicked
             //    .Do(async x =>

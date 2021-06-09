@@ -4,10 +4,51 @@
                           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                           xmlns:rxui="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
                           xmlns:vm="clr-namespace:ReactiveFilter;assembly=ReactiveFilter"
+                          x:DataType="vm:ElementViewModel"
                           x:TypeArguments="vm:ElementViewModel">
-    <ContentView.Content>
-        <StackLayout>
-            <Label Text="Hello Xamarin.Forms!" />
-        </StackLayout>
-    </ContentView.Content>
+    <Grid Margin="12,12,12,0"
+          ColumnDefinitions="24, 1*"
+          RowDefinitions="1*,1*">
+        <BoxView x:Name="Color"
+                 Grid.Row="0"
+                 Grid.RowSpan="2"
+                 HeightRequest="24"
+                 VerticalOptions="Center" />
+        <Label Grid.Column="1" FontAttributes="Bold">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Model:" />
+                    <Span Text=" " />
+                    <Span x:Name="Model" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+
+        <Label Grid.Column="1"
+               FontAttributes="Bold"
+               HorizontalOptions="End">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Rating:" />
+                    <Span Text=" " />
+                    <Span x:Name="Rating" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+
+        <Label x:Name="DeliveryTime"
+               Grid.Row="1"
+               Grid.Column="1" />
+        <Label Grid.Row="1"
+               Grid.Column="1"
+               HorizontalOptions="End">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Cost:" />
+                    <Span Text=" " />
+                    <Span x:Name="Cost" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+    </Grid>
 </rxui:ReactiveContentView>

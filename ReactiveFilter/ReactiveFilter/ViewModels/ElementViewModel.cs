@@ -49,7 +49,7 @@
                     Model = mobile.Model;
                     Brand = mobile.Brand;
                     OperativeSystem = mobile.OperativeSystem;
-                    Cost = mobile.Cost;
+                    Cost = Math.Round(mobile.Cost, 2);
                 }).Subscribe();
 
             this.WhenAnyValue(x => x.UsersValue)
