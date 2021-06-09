@@ -33,26 +33,45 @@
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .BindTo(this, v => v.ActivityIndicator.IsVisible).DisposeWith(Disposables);
 
-            ExpanderActivator.Events().Clicked
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Do(x =>
-                {
-                    Expander.IsExpanded = !Expander.IsExpanded;
-                    ExpanderActivator.Rotation = Expander.IsExpanded ? -90 : 90;
-                })
-                .Subscribe();
+            this.BindCommand(ViewModel, vm => vm.ChangeExpand, v => v.ExpanderActivator);
 
-            //TODO navigate on selected element
-            //TestClick.Events().Clicked
-            //    .Do(async x =>
-            //    {
-            //        var viewModel = new DetailViewModel();
-            //        var detail = new Detail
-            //        {
-            //            ViewModel = viewModel
-            //        };
-            //        await Navigation.PushAsync(detail);
-            //    }).Subscribe();
+            this.OneWayBind(ViewModel, vm => vm.IsExpanded, v => v.Expander.IsExpanded);
+            this.OneWayBind(ViewModel, vm => vm.IsExpanded, v => v.ExpanderActivator.Rotation, ex => ex ? -90 : 90);
+
+            SortBindings();
+            CostBindings();
+        }
+
+        private void CostBindings()
+        {
+            this.OneWayBind(ViewModel, vm => vm.Min, v => v.RangeSlider.MinimumValue);
+            this.Bind(ViewModel, vm => vm.MinSelected, v => v.RangeSlider.LowerValue);
+            this.OneWayBind(ViewModel, vm => vm.Max, v => v.RangeSlider.MaximumValue);
+            this.Bind(ViewModel, vm => vm.MaxSelected, v => v.RangeSlider.UpperValue);
+        }
+
+        private void SortBindings()
+        {
+            this.OneWayBind(ViewModel, vm => vm.Sorter, v => v.SorterNoneTitle.FontAttributes,
+                sort => sort == Sorter.None ? FontAttributes.Bold : FontAttributes.None);
+
+            this.OneWayBind(ViewModel, vm => vm.Sorter, v => v.SorterNameTitle.FontAttributes,
+                sort => sort == Sorter.ModelName ? FontAttributes.Bold : FontAttributes.None);
+
+            this.OneWayBind(ViewModel, vm => vm.Sorter, v => v.SorterDeliveryTitle.FontAttributes,
+                sort => sort == Sorter.DeliveryTime ? FontAttributes.Bold : FontAttributes.None);
+
+            this.OneWayBind(ViewModel, vm => vm.Sorter, v => v.SorterRatingTitle.FontAttributes,
+                sort => sort == Sorter.Rating ? FontAttributes.Bold : FontAttributes.None);
+
+            this.OneWayBind(ViewModel, vm => vm.Sorter, v => v.SorterColorTitle.FontAttributes,
+                sort => sort == Sorter.Color ? FontAttributes.Bold : FontAttributes.None);
+
+            this.BindCommand(ViewModel, vm => vm.Sort, v => v.SorterNone, Observable.Return(Sorter.None));
+            this.BindCommand(ViewModel, vm => vm.Sort, v => v.SorterName, Observable.Return(Sorter.ModelName));
+            this.BindCommand(ViewModel, vm => vm.Sort, v => v.SorterDelivery, Observable.Return(Sorter.DeliveryTime));
+            this.BindCommand(ViewModel, vm => vm.Sort, v => v.SorterRating, Observable.Return(Sorter.Rating));
+            this.BindCommand(ViewModel, vm => vm.Sort, v => v.SorterColor, Observable.Return(Sorter.Color));
         }
     }
 }

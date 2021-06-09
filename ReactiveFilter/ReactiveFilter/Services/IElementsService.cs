@@ -9,5 +9,8 @@
         Task StartService();
         void StopService();
         void EvaluateElement(string id, int userValue);
+
+        double Max();
+        double Min();
     }
 }

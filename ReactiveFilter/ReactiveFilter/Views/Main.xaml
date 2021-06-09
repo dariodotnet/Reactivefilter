@@ -29,7 +29,41 @@
                 </Grid>
             </toolkit:Expander.Header>
             <toolkit:Expander.Content>
-                <StackLayout HeightRequest="480" Spacing="12" />
+                <StackLayout Margin="24,24,0,0" Spacing="0">
+                    <Label Text="Sorting:" />
+                    <StackLayout Margin="12,0,0,0"
+                                 Orientation="Horizontal"
+                                 Spacing="8">
+                        <Label x:Name="SorterNoneTitle" Text="None">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="SorterNone" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label x:Name="SorterNameTitle" Text="Name">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="SorterName" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label x:Name="SorterDeliveryTitle" Text="Delivery">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="SorterDelivery" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label x:Name="SorterRatingTitle" Text="Rating">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="SorterRating" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label x:Name="SorterColorTitle" Text="Color">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="SorterColor" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                    <Label Margin="0,16,0,0" Text="Cost range:" />
+                    <toolkit:RangeSlider x:Name="RangeSlider" Margin="0,0,24,0" />
+                    <Label Margin="0,16,0,0" Text="Next filter" />
+                </StackLayout>
             </toolkit:Expander.Content>
         </toolkit:Expander>
 

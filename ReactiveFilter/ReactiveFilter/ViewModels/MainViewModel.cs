@@ -1,6 +1,7 @@
 ﻿namespace ReactiveFilter
 {
     using DynamicData;
+    using DynamicData.Binding;
     using ReactiveUI;
     using ReactiveUI.Fody.Helpers;
     using Services;
@@ -21,9 +22,17 @@
         [Reactive] public bool IsLoaded { get; set; }
         public bool Loading { [ObservableAsProperty] get; }
 
+        [Reactive] public bool IsExpanded { get; set; }
         [Reactive] public string ModelFilter { get; set; }
+        [Reactive] public Sorter Sorter { get; set; }
+        [Reactive] public double Min { get; set; }
+        [Reactive] public double MinSelected { get; set; }
+        [Reactive] public double Max { get; set; }
+        [Reactive] public double MaxSelected { get; set; }
 
         public ReactiveCommand<Unit, Unit> LoadData { get; }
+        public ReactiveCommand<Unit, Unit> ChangeExpand { get; }
+        public ReactiveCommand<Sorter, Unit> Sort { get; }
 
         public MainViewModel(IElementsService elementsService = null)
         {
@@ -34,17 +43,61 @@
                 await LoadExecute();
             });
             LoadData.IsExecuting.ToPropertyEx(this, x => x.Loading);
-            LoadData.Do(signal => IsLoaded = true).Subscribe();
+            LoadData
+                .Do(signal => IsLoaded = true)
+                .Do(x =>
+                {
+                    Min = _elementsService.Min();
+                    MinSelected = Min;
+                    Max = _elementsService.Max();
+                    MaxSelected = Max;
+                }).Subscribe();
             LoadData.ThrownExceptions.Subscribe(ex =>
             {
                 //TODO handle exceptions
             });
 
+            ChangeExpand = ReactiveCommand.Create(() => { IsExpanded = !IsExpanded; });
+
+            Sort = ReactiveCommand.Create<Sorter, Unit>(sorter =>
+            {
+                Sorter = sorter;
+                return Unit.Default;
+            });
+            Sort.InvokeCommand(ChangeExpand);
+
+            this.WhenAnyValue(x => x.MinSelected, x => x.MaxSelected)
+                .Throttle(TimeSpan.FromMilliseconds(500), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .Subscribe(v =>
+                {
+
+                });
+
             var filter = this.WhenAnyValue(x => x.ModelFilter)
                 .Select(BuildFilter);
 
+            var sort = this.WhenAnyValue(x => x.Sorter)
+                .Select(sorter =>
+                {
+                    switch (sorter)
+                    {
+                        case Sorter.ModelName:
+                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.Model);
+                        case Sorter.DeliveryTime:
+                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.DeliveryTime);
+                        case Sorter.Rating:
+                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.UsersValueAverage);
+                        case Sorter.Color:
+                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.Color);
+                        default:
+                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.Id);
+                    }
+                });
+
             _elementsService.Elements.Connect()
                 .Filter(filter)
+                .Sort(sort)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _elements)
                 .DisposeMany()
@@ -60,5 +113,10 @@
 
             return element => element.Model.ToLower().Contains(model);
         }
+    }
+
+    public enum Sorter
+    {
+        None, ModelName, DeliveryTime, Rating, Color
     }
 }

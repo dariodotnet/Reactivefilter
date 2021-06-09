@@ -26,7 +26,7 @@
             //We can connect to this service and update the list in real time
             //_elementCreator = _elementCreatorDefinition;
 
-            for (var i = 0; i < 1000; i++)
+            for (var i = 0; i < 100; i++)
             {
                 Elements.Add(GenerateElement());
             }
@@ -45,6 +45,16 @@
             Elements.Items.Where(x => x.Mobile != null && x.Mobile.Model.Equals(element.Model))
                 .ToList()
                 .ForEach(e => e.UsersValue.Add(userValue));
+        }
+
+        public double Max()
+        {
+            return Elements.Items.Select(x => x.Cost).Max();
+        }
+
+        public double Min()
+        {
+            return Elements.Items.Select(x => x.Cost).Min();
         }
 
         private IDisposable _elementCreatorDefinition =>
