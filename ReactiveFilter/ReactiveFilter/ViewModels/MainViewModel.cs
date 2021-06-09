@@ -21,6 +21,8 @@
         [Reactive] public bool IsLoaded { get; set; }
         public bool Loading { [ObservableAsProperty] get; }
 
+        [Reactive] public string ModelFilter { get; set; }
+
         public ReactiveCommand<Unit, Unit> LoadData { get; }
 
         public MainViewModel(IElementsService elementsService = null)
@@ -38,7 +40,11 @@
                 //TODO handle exceptions
             });
 
+            var filter = this.WhenAnyValue(x => x.ModelFilter)
+                .Select(BuildFilter);
+
             _elementsService.Elements.Connect()
+                .Filter(filter)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _elements)
                 .DisposeMany()
@@ -46,5 +52,13 @@
         }
 
         private Task LoadExecute() => _elementsService.StartService();
+
+        private Func<ElementViewModel, bool> BuildFilter(string model)
+        {
+            if (string.IsNullOrWhiteSpace(model))
+                return element => true;
+
+            return element => element.Model.ToLower().Contains(model);
+        }
     }
 }

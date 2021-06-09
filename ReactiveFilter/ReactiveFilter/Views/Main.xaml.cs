@@ -24,6 +24,8 @@
                 .Select(x => Unit.Default)
                 .InvokeCommand(ViewModel.LoadData).DisposeWith(Disposables);
 
+            this.Bind(ViewModel, vm => vm.ModelFilter, v => v.SearchBar.Text);
+
             this.OneWayBind(ViewModel, vm => vm.Elements, v => v.Elements.ItemsSource);
 
             this.WhenAnyValue(v => v.ViewModel.Loading, v => v.ViewModel.IsLoaded)
