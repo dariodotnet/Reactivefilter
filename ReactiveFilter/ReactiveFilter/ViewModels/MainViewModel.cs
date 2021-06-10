@@ -80,10 +80,7 @@
             });
             GroupElements.InvokeCommand(ChangeExpand);
 
-            var filter = this.WhenAnyValue(x => x.ModelFilter)
-                .Select(BuildFilter);
-
-            var complexFilter = this.WhenAnyValue(x => x.ModelFilter, x => x.MaxSelected, x => x.MinSelected)
+            var complexFilter = this.WhenAnyValue(x => x.ModelFilter, x => x.MaxSelected, x => x.MinSelected, x => x.Group)
                 .Select(BuildComplexFilter);
 
             var sort = this.WhenAnyValue(x => x.Sorter, x => x.Ascending)
@@ -115,7 +112,7 @@
                 });
 
             _elementsService.Elements.Connect()
-                .Filter(filter)
+                .Filter(complexFilter)
                 .Sort(sort)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _elements)
@@ -123,7 +120,7 @@
                 .Subscribe();
 
             _elementsService.Elements.Connect()
-                .Filter(filter)
+                .Filter(complexFilter)
                 .Sort(sort)
                 .GroupOn(arg =>
                 {
@@ -146,17 +143,19 @@
 
         private Task LoadExecute() => _elementsService.StartService();
 
-        private Func<ElementViewModel, bool> BuildFilter(string model)
+        private Func<ElementViewModel, bool> BuildComplexFilter((string, double, double, Group) valueTuple)
         {
-            if (string.IsNullOrWhiteSpace(model))
-                return element => true;
+            return element =>
+            {
+                var result = true;
 
-            return element => element.Model.ToLower().Contains(model);
-        }
+                if (!string.IsNullOrWhiteSpace(valueTuple.Item1))
+                {
+                    result = element.Model.ToLower().Contains(valueTuple.Item1.ToLower());
+                }
 
-        private Func<ElementViewModel, bool> BuildComplexFilter((string, double, double) valueTuple)
-        {
-            return element => true;
+                return result && element.Cost <= valueTuple.Item2 && element.Cost >= valueTuple.Item3;
+            };
         }
     }
 
