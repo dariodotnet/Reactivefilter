@@ -8,6 +8,8 @@
              x:TypeArguments="vm:MainViewModel"
              NavigationPage.HasNavigationBar="False">
     <Grid RowDefinitions="Auto, 1*" RowSpacing="0">
+
+        <!--  FILTER AND SORTING  -->
         <toolkit:Expander x:Name="Expander" BackgroundColor="#1A0000ff">
             <toolkit:Expander.Header>
                 <Grid>
@@ -33,7 +35,12 @@
                     <StackLayout Margin="24,24,0,0"
                                  HeightRequest="224"
                                  Spacing="0">
-                        <Label Text="Sorting:" />
+
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Sorting:" VerticalOptions="Center" />
+                            <Switch x:Name="Ascending" />
+                        </StackLayout>
+
                         <StackLayout Margin="12,0,0,0"
                                      Orientation="Horizontal"
                                      Spacing="8">
@@ -99,7 +106,7 @@
             </toolkit:Expander.Content>
         </toolkit:Expander>
 
-
+        <!--  COLLECTION  -->
         <CollectionView x:Name="Elements" Grid.Row="1">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
@@ -114,6 +121,8 @@
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
         </CollectionView>
+
+        <!--  ACTIVITY INDICATOR  -->
         <Grid x:Name="ActivityIndicator"
               Grid.Row="0"
               Grid.RowSpan="2"

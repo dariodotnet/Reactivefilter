@@ -103,6 +103,8 @@
             this.OneWayBind(ViewModel, vm => vm.Sorter, v => v.SorterColorTitle.FontAttributes,
                 sort => sort == Sorter.Color ? FontAttributes.Bold : FontAttributes.None);
 
+            this.Bind(ViewModel, vm => vm.Ascending, v => v.Ascending.IsToggled);
+
             this.BindCommand(ViewModel, vm => vm.Sort, v => v.SorterNone, Observable.Return(Sorter.None));
             this.BindCommand(ViewModel, vm => vm.Sort, v => v.SorterName, Observable.Return(Sorter.ModelName));
             this.BindCommand(ViewModel, vm => vm.Sort, v => v.SorterDelivery, Observable.Return(Sorter.DeliveryTime));

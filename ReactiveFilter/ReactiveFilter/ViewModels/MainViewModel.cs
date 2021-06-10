@@ -29,6 +29,7 @@
         [Reactive] public bool IsExpanded { get; set; }
         [Reactive] public string ModelFilter { get; set; }
         [Reactive] public Sorter Sorter { get; set; }
+        [Reactive] public bool Ascending { get; set; }
         [Reactive] public double Min { get; set; }
         [Reactive] public double MinSelected { get; set; }
         [Reactive] public double Max { get; set; }
@@ -82,21 +83,31 @@
             var filter = this.WhenAnyValue(x => x.ModelFilter)
                 .Select(BuildFilter);
 
-            var sort = this.WhenAnyValue(x => x.Sorter)
+            var sort = this.WhenAnyValue(x => x.Sorter, x => x.Ascending)
                 .Select(sorter =>
                 {
-                    switch (sorter)
+                    switch (sorter.Item1)
                     {
                         case Sorter.ModelName:
-                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.Model);
+                            return sorter.Item2
+                                ? SortExpressionComparer<ElementViewModel>.Ascending(x => x.Model)
+                                : SortExpressionComparer<ElementViewModel>.Descending(x => x.Model);
                         case Sorter.DeliveryTime:
-                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.DeliveryTime);
+                            return sorter.Item2
+                                ? SortExpressionComparer<ElementViewModel>.Ascending(x => x.DeliveryTime)
+                                : SortExpressionComparer<ElementViewModel>.Descending(x => x.DeliveryTime);
                         case Sorter.Rating:
-                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.UsersValueAverage);
+                            return sorter.Item2
+                                ? SortExpressionComparer<ElementViewModel>.Ascending(x => x.UsersValueAverage)
+                                : SortExpressionComparer<ElementViewModel>.Descending(x => x.UsersValueAverage);
                         case Sorter.Color:
-                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.Color);
+                            return sorter.Item2
+                                ? SortExpressionComparer<ElementViewModel>.Ascending(x => x.Color)
+                                : SortExpressionComparer<ElementViewModel>.Descending(x => x.Color);
                         default:
-                            return SortExpressionComparer<ElementViewModel>.Descending(x => x.Id);
+                            return sorter.Item2
+                                ? SortExpressionComparer<ElementViewModel>.Ascending(x => x.Id)
+                                : SortExpressionComparer<ElementViewModel>.Descending(x => x.Id);
                     }
                 });
 
@@ -138,6 +149,11 @@
                 return element => true;
 
             return element => element.Model.ToLower().Contains(model);
+        }
+
+        private Func<ElementViewModel, bool> BuildComplexFilter()
+        {
+            return element => true;
         }
     }
 
