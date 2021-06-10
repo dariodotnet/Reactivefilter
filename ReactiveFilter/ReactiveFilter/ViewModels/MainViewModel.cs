@@ -9,6 +9,7 @@
     using System;
     using System.Collections.ObjectModel;
     using System.Reactive;
+    using System.Reactive.Disposables;
     using System.Reactive.Linq;
     using System.Threading.Tasks;
 
@@ -18,6 +19,9 @@
 
         private ReadOnlyObservableCollection<ElementViewModel> _elements;
         public ReadOnlyObservableCollection<ElementViewModel> Elements => _elements;
+
+        private ReadOnlyObservableCollection<ElementsGroup> _elementsGroup;
+        public ReadOnlyObservableCollection<ElementsGroup> ElementsGroup => _elementsGroup;
 
         [Reactive] public bool IsLoaded { get; set; }
         public bool Loading { [ObservableAsProperty] get; }
@@ -29,10 +33,12 @@
         [Reactive] public double MinSelected { get; set; }
         [Reactive] public double Max { get; set; }
         [Reactive] public double MaxSelected { get; set; }
+        [Reactive] public Group Group { get; set; }
 
         public ReactiveCommand<Unit, Unit> LoadData { get; }
         public ReactiveCommand<Unit, Unit> ChangeExpand { get; }
         public ReactiveCommand<Sorter, Unit> Sort { get; }
+        public ReactiveCommand<Group, Unit> GroupElements { get; }
 
         public MainViewModel(IElementsService elementsService = null)
         {
@@ -65,6 +71,13 @@
                 return Unit.Default;
             });
             Sort.InvokeCommand(ChangeExpand);
+
+            GroupElements = ReactiveCommand.Create<Group, Unit>(group =>
+            {
+                Group = group;
+                return Unit.Default;
+            });
+            GroupElements.InvokeCommand(ChangeExpand);
 
             this.WhenAnyValue(x => x.MinSelected, x => x.MaxSelected)
                 .Throttle(TimeSpan.FromMilliseconds(500), RxApp.TaskpoolScheduler)
@@ -102,6 +115,14 @@
                 .Bind(out _elements)
                 .DisposeMany()
                 .Subscribe();
+
+            _elementsService.Elements.Connect()
+                .GroupOn(arg => arg.Color)
+                .Transform(grouping => new ElementsGroup(grouping))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _elementsGroup)
+                .DisposeMany()
+                .Subscribe();
         }
 
         private Task LoadExecute() => _elementsService.StartService();
@@ -115,8 +136,36 @@
         }
     }
 
+    public class ElementsGroup : ObservableCollectionExtended<ElementViewModel>, IDisposable
+    {
+        private CompositeDisposable Disposables;
+
+        [Reactive] public string Header { get; set; }
+
+        public ElementsGroup(IGroup<ElementViewModel, string> grouping)
+        {
+            Disposables = new CompositeDisposable();
+
+            Header = grouping.GroupKey;
+
+            grouping.List.Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(this, 2000)
+                .Subscribe().DisposeWith(Disposables);
+        }
+        public void Dispose()
+        {
+            Disposables?.Dispose();
+        }
+    }
+
     public enum Sorter
     {
         None, ModelName, DeliveryTime, Rating, Color
+    }
+
+    public enum Group
+    {
+        None, Color, Brand, OperativeSystem
     }
 }

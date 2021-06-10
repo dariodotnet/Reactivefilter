@@ -2,6 +2,7 @@
 {
     using ReactiveUI;
     using System;
+    using System.Linq;
     using System.Reactive;
     using System.Reactive.Disposables;
     using System.Reactive.Linq;
@@ -39,7 +40,28 @@
             this.OneWayBind(ViewModel, vm => vm.IsExpanded, v => v.ExpanderActivator.Rotation, ex => ex ? -90 : 90);
 
             SortBindings();
+            GroupBindings();
             CostBindings();
+        }
+
+        private void GroupBindings()
+        {
+            this.OneWayBind(ViewModel, vm => vm.Group, v => v.GroupNoneTitle.FontAttributes,
+                group => group == Group.None ? FontAttributes.Bold : FontAttributes.None);
+
+            this.OneWayBind(ViewModel, vm => vm.Group, v => v.GroupColorTitle.FontAttributes,
+                group => group == Group.Color ? FontAttributes.Bold : FontAttributes.None);
+
+            this.OneWayBind(ViewModel, vm => vm.Group, v => v.GroupBrandTitle.FontAttributes,
+                group => group == Group.Brand ? FontAttributes.Bold : FontAttributes.None);
+
+            this.OneWayBind(ViewModel, vm => vm.Group, v => v.GroupOperativeSystemTitle.FontAttributes,
+                group => group == Group.OperativeSystem ? FontAttributes.Bold : FontAttributes.None);
+
+            this.BindCommand(ViewModel, vm => vm.GroupElements, v => v.GroupNone, Observable.Return(Group.None));
+            this.BindCommand(ViewModel, vm => vm.GroupElements, v => v.GroupColor, Observable.Return(Group.Color));
+            this.BindCommand(ViewModel, vm => vm.GroupElements, v => v.GroupBrand, Observable.Return(Group.Brand));
+            this.BindCommand(ViewModel, vm => vm.GroupElements, v => v.GroupOperativeSystem, Observable.Return(Group.OperativeSystem));
         }
 
         private void CostBindings()

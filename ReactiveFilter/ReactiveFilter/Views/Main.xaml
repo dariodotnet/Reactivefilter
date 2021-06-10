@@ -8,7 +8,7 @@
              x:TypeArguments="vm:MainViewModel"
              NavigationPage.HasNavigationBar="False">
     <Grid RowDefinitions="Auto, 1*" RowSpacing="0">
-        <toolkit:Expander x:Name="Expander">
+        <toolkit:Expander x:Name="Expander" BackgroundColor="LightSkyBlue">
             <toolkit:Expander.Header>
                 <Grid>
                     <SearchBar x:Name="SearchBar"
@@ -29,41 +29,73 @@
                 </Grid>
             </toolkit:Expander.Header>
             <toolkit:Expander.Content>
-                <StackLayout Margin="24,24,0,0" Spacing="0">
-                    <Label Text="Sorting:" />
-                    <StackLayout Margin="12,0,0,0"
-                                 Orientation="Horizontal"
-                                 Spacing="8">
-                        <Label x:Name="SorterNoneTitle" Text="None">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer x:Name="SorterNone" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label x:Name="SorterNameTitle" Text="Name">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer x:Name="SorterName" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label x:Name="SorterDeliveryTitle" Text="Delivery">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer x:Name="SorterDelivery" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label x:Name="SorterRatingTitle" Text="Rating">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer x:Name="SorterRating" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label x:Name="SorterColorTitle" Text="Color">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer x:Name="SorterColor" />
-                            </Label.GestureRecognizers>
-                        </Label>
+                <Grid>
+                    <StackLayout Margin="24,24,0,0"
+                                 HeightRequest="224"
+                                 Spacing="0">
+                        <Label Text="Sorting:" />
+                        <StackLayout Margin="12,0,0,0"
+                                     Orientation="Horizontal"
+                                     Spacing="8">
+                            <Label x:Name="SorterNoneTitle" Text="None">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="SorterNone" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="SorterNameTitle" Text="Name">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="SorterName" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="SorterDeliveryTitle" Text="Delivery">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="SorterDelivery" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="SorterRatingTitle" Text="Rating">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="SorterRating" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="SorterColorTitle" Text="Color">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="SorterColor" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+                        <Label Margin="0,16,0,0" Text="Cost range:" />
+                        <toolkit:RangeSlider x:Name="RangeSlider" Margin="0,0,24,0" />
+                        <Label Margin="0,16,0,0" Text="Grouping by:" />
+                        <StackLayout Margin="12,0,0,0"
+                                     Orientation="Horizontal"
+                                     Spacing="8">
+                            <Label x:Name="GroupNoneTitle" Text="None">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="GroupNone" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="GroupColorTitle" Text="Color">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="GroupColor" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="GroupBrandTitle" Text="Brand">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="GroupBrand" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="GroupOperativeSystemTitle" Text="Operative System">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="GroupOperativeSystem" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+                        <BoxView Margin="-16,12,2,0"
+                                 BackgroundColor="Gray"
+                                 HeightRequest="1"
+                                 VerticalOptions="End" />
                     </StackLayout>
-                    <Label Margin="0,16,0,0" Text="Cost range:" />
-                    <toolkit:RangeSlider x:Name="RangeSlider" Margin="0,0,24,0" />
-                    <Label Margin="0,16,0,0" Text="Next filter" />
-                </StackLayout>
+                </Grid>
             </toolkit:Expander.Content>
         </toolkit:Expander>
 
