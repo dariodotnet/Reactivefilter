@@ -27,7 +27,21 @@
 
             this.Bind(ViewModel, vm => vm.ModelFilter, v => v.SearchBar.Text);
 
-            this.OneWayBind(ViewModel, vm => vm.Elements, v => v.Elements.ItemsSource);
+            this.OneWayBind(ViewModel, vm => vm.Group, v => v.Elements.IsGrouped, g => g != Group.None);
+
+            this.WhenAnyValue(v => v.ViewModel.Group)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Do(group =>
+                {
+                    if (group == Group.None)
+                    {
+                        this.OneWayBind(ViewModel, vm => vm.Elements, v => v.Elements.ItemsSource);
+                    }
+                    else
+                    {
+                        this.OneWayBind(ViewModel, vm => vm.ElementsGroup, v => v.Elements.ItemsSource);
+                    }
+                }).Subscribe();
 
             this.WhenAnyValue(v => v.ViewModel.Loading, v => v.ViewModel.IsLoaded)
                 .Select(x => x.Item1 || !x.Item2)

@@ -79,14 +79,6 @@
             });
             GroupElements.InvokeCommand(ChangeExpand);
 
-            this.WhenAnyValue(x => x.MinSelected, x => x.MaxSelected)
-                .Throttle(TimeSpan.FromMilliseconds(500), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .Subscribe(v =>
-                {
-
-                });
-
             var filter = this.WhenAnyValue(x => x.ModelFilter)
                 .Select(BuildFilter);
 
@@ -117,7 +109,20 @@
                 .Subscribe();
 
             _elementsService.Elements.Connect()
-                .GroupOn(arg => arg.Color)
+                .Filter(filter)
+                .Sort(sort)
+                .GroupOn(arg =>
+                {
+                    switch (Group)
+                    {
+                        case Group.Color:
+                            return arg.Color;
+                        case Group.Brand:
+                            return arg.Brand;
+                        default:
+                            return arg.OperativeSystem;
+                    }
+                })
                 .Transform(grouping => new ElementsGroup(grouping))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _elementsGroup)

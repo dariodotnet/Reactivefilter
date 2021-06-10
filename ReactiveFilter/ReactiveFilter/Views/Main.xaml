@@ -8,7 +8,7 @@
              x:TypeArguments="vm:MainViewModel"
              NavigationPage.HasNavigationBar="False">
     <Grid RowDefinitions="Auto, 1*" RowSpacing="0">
-        <toolkit:Expander x:Name="Expander" BackgroundColor="LightSkyBlue">
+        <toolkit:Expander x:Name="Expander" BackgroundColor="#1A0000ff">
             <toolkit:Expander.Header>
                 <Grid>
                     <SearchBar x:Name="SearchBar"
@@ -106,6 +106,13 @@
                     <views:Element />
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="vm:ElementsGroup">
+                    <Label Padding="24,6,0,6"
+                           BackgroundColor="#330000ff"
+                           Text="{Binding Header}" />
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
         </CollectionView>
         <Grid x:Name="ActivityIndicator"
               Grid.Row="0"
