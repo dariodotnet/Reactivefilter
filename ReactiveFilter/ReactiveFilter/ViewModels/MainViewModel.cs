@@ -83,6 +83,9 @@
             var filter = this.WhenAnyValue(x => x.ModelFilter)
                 .Select(BuildFilter);
 
+            var complexFilter = this.WhenAnyValue(x => x.ModelFilter, x => x.MaxSelected, x => x.MinSelected)
+                .Select(BuildComplexFilter);
+
             var sort = this.WhenAnyValue(x => x.Sorter, x => x.Ascending)
                 .Select(sorter =>
                 {
@@ -151,7 +154,7 @@
             return element => element.Model.ToLower().Contains(model);
         }
 
-        private Func<ElementViewModel, bool> BuildComplexFilter()
+        private Func<ElementViewModel, bool> BuildComplexFilter((string, double, double) valueTuple)
         {
             return element => true;
         }
